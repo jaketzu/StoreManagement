@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StoreManagement"
         mc:Ignorable="d"
-        Title="Store Management" Height="400" Width="300">
+        Title="Store Management" Width="300" Height="400">
 
     <Grid HorizontalAlignment="Center" Width="300">
         <TabControl x:Name="tabControl" TabStripPlacement="Top" SelectionChanged="OnTabChanged">
@@ -32,17 +32,7 @@
                     <ComboBox x:Name="productComboBox1" Width="280" HorizontalAlignment="Center" TextSearch.TextPath="Name">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Producer}" />
-                                    <TextBlock Text=" " />
-                                    <TextBlock Text="{Binding Name}" />
-                                    <TextBlock Text=": " />
-                                    <TextBlock Text="{Binding Price}" />
-                                    <TextBlock Text="€ " />
-                                    <TextBlock Text="(" />
-                                    <TextBlock Text="{Binding Amount}" />
-                                    <TextBlock Text=")" />
-                                </StackPanel>
+                                <TextBlock Text="{Binding}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -73,11 +63,7 @@
                     <ComboBox x:Name="customerComboBox1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="280" Margin="0,2,0,0" SelectionChanged="OnCustomerComboBox1SelectionChanged" TextSearch.TextPath="Name">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Id}" />
-                                    <TextBlock Text=": " />
-                                    <TextBlock Text="{Binding Name}" />
-                                </StackPanel>
+                                <TextBlock Text="{Binding}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -92,11 +78,7 @@
                         <ComboBox x:Name="customerComboBox2" VerticalAlignment="Top" Width="215" Margin="0,2,0,0" TextSearch.TextPath="Name">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Id}" />
-                                        <TextBlock Text=": " />
-                                        <TextBlock Text="{Binding Name}" />
-                                    </StackPanel>
+                                    <TextBlock Text="{Binding}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -106,17 +88,7 @@
                         <ComboBox x:Name="productComboBox2" Width="215" Margin="10,0,0,0" TextSearch.TextPath="Name">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Producer}" />
-                                        <TextBlock Text=" " />
-                                        <TextBlock Text="{Binding Name}" />
-                                        <TextBlock Text=": " />
-                                        <TextBlock Text="{Binding Price}" />
-                                        <TextBlock Text="€ " />
-                                        <TextBlock Text="(" />
-                                        <TextBlock Text="{Binding Amount}" />
-                                        <TextBlock Text=")" />
-                                    </StackPanel>
+                                    <TextBlock Text="{Binding}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

@@ -82,9 +82,9 @@ namespace StoreManagement
             }
         }
 
-        public double GetMoneySpent()
+        public decimal GetMoneySpent()
         {
-            double money = 0;
+            decimal money = 0;
             foreach (Product product in Products)
             {
                 money += product.Price * product.Amount;

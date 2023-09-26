@@ -19,7 +19,7 @@ namespace StoreManagement
         }
 
         // adds a product with the chosen parameters
-        // if the product already exists in the store, it just adds the amount to the existing product
+        // if the product already exists in the store, adds the chosen amount to the existing product
         // if not, creates a new product and adds it to the store
         private void AddProducts(object sender, RoutedEventArgs e)
         {
@@ -35,10 +35,9 @@ namespace StoreManagement
                     productPriceString != string.Empty &&
                     productAmountString != string.Empty)
                 {
-                    if (double.TryParse(productPriceString, out double productPrice) &&
-                        int.TryParse(productAmountString, out int productAmount) &&
-                        productPrice > 0 &&
-                        productAmount > 0)
+                    if (decimal.TryParse(productPriceString, out decimal productPrice) &&
+                        uint.TryParse(productAmountString, out uint productAmount) &&
+                        productPrice > 0)
                     {
                         Product? product = new();
                         if (!App.Products.Any(product => product.Producer == productProducer && product.Name == productName && product.Price == productPrice))
@@ -65,7 +64,9 @@ namespace StoreManagement
                         productPriceTextBox.Clear();
                         productAmountTextBox1.Text = "1";
 
-                        ReloadProducts(App.Products.Count);
+                        ReloadProducts();
+                        productComboBox1.SelectedItem = product;
+                        productComboBox2.SelectedItem = product;
                     }
                     else
                     {
@@ -130,9 +131,9 @@ namespace StoreManagement
         {
             try
             {
-                if (productComboBox2.SelectedItem is Product selectedProduct)
+                if (productComboBox1.SelectedItem is Product selectedProduct)
                 {
-                    if (int.TryParse(productAmountTextBox2.Text, out int refillAmount) && refillAmount > 0)
+                    if (uint.TryParse(productAmountTextBox2.Text, out uint refillAmount))
                     {
                         selectedProduct.Amount += refillAmount;
                         productAmountTextBox2.Text = "1";
@@ -316,16 +317,15 @@ namespace StoreManagement
         {
             try
             {
-                string amountString = productAmountTextBox3.Text;
+                string productAmountString = productAmountTextBox3.Text;
                 if (customerComboBox2.SelectedItem is Customer selectedCustomer &&
                     productComboBox2.SelectedItem is Product selectedProduct)
                 {
-                    if (int.TryParse(amountString, out int productAmount) &&
-                        productAmount > 0)
+                    if (uint.TryParse(productAmountString, out uint productAmount))
                     {
                         string productProducer = selectedProduct.Producer;
                         string productName = selectedProduct.Name;
-                        double productPrice = selectedProduct.Price;
+                        decimal productPrice = selectedProduct.Price;
 
                         Product product = new();
 
@@ -358,6 +358,9 @@ namespace StoreManagement
                                         MessageBoxImage.Warning);
                                 }
                             }
+
+                            productAmountTextBox3.Text = "1";
+                            cartTextBlock.Text = selectedCustomer.GetCart();
                         }
                         else
                         {
@@ -376,9 +379,6 @@ namespace StoreManagement
                             MessageBoxButton.OK,
                             MessageBoxImage.Warning);
                     }
-
-                    productAmountTextBox3.Text = "1";
-                    cartTextBlock.Text = selectedCustomer.GetCart();
                 }
                 else
                 {
@@ -413,8 +413,8 @@ namespace StoreManagement
                         {
                             string productProducer = cartProduct.Producer;
                             string productName = cartProduct.Name;
-                            double productPrice = cartProduct.Price;
-                            int productAmount = cartProduct.Amount;
+                            decimal productPrice = cartProduct.Price;
+                            uint productAmount = cartProduct.Amount;
 
                             Product newProduct = new();
 
@@ -544,8 +544,16 @@ namespace StoreManagement
 
                 if (tabControl.SelectedIndex == 3)
                 {
-                    double income = 0;
-                    int productsSold = 0;
+                    int customers = App.Customers.Count;
+                    uint productsAvailable = 0;
+                    uint productsSold = 0;
+                    decimal income = 0;
+
+                    foreach (Product product in App.Products)
+                    {
+                        productsAvailable += product.Amount;
+                    }
+
                     foreach (Customer customer in App.Customers)
                     {
                         income += customer.GetMoneySpent();
@@ -555,7 +563,7 @@ namespace StoreManagement
                         }
                     }
 
-                    statisticsTextBlock.Text = $"Products sold: {productsSold}\nIncome: {income}€";
+                    statisticsTextBlock.Text = $"Customers: {customers}\nProducts available: {productsAvailable}\nProducts sold: {productsSold}\nIncome: {income:F}€";
                 }
             }
             catch (Exception ex)
@@ -571,7 +579,7 @@ namespace StoreManagement
         // needed so the combo boxes' text's are accurate after changing a products count
         // clears the products and readds them, but sorted
         // sets the selectedindex of the combo boxes to the correct place
-        public void ReloadProducts(int selectedIndex)
+        public void ReloadProducts(int? selectedIndex = null)
         {
             try
             {
@@ -583,17 +591,17 @@ namespace StoreManagement
                     App.Products.Add(product);
 
                 int productAmount = App.Products.Count;
-                if (productAmount > 0)
+                if (selectedIndex != null && productAmount > 0)
                 {
                     if (selectedIndex < productAmount)
                     {
-                        productComboBox1.SelectedIndex = selectedIndex;
-                        productComboBox2.SelectedIndex = selectedIndex;
+                        productComboBox1.SelectedIndex = (int)selectedIndex;
+                        productComboBox2.SelectedIndex = (int)selectedIndex;
                     }
                     else
                     {
-                        productComboBox1.SelectedIndex = selectedIndex - 1;
-                        productComboBox2.SelectedIndex = selectedIndex - 1;
+                        productComboBox1.SelectedIndex = (int)(selectedIndex - 1);
+                        productComboBox2.SelectedIndex = (int)(selectedIndex - 1);
                     }
                 }
             }
